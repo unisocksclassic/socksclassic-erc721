@@ -20,6 +20,7 @@ token: public(SocksERC20)
 nft: public(SocksERC721)
 tokensMinted: public(uint256)
 owner: public(address)
+startingIndex: uint256
 
 @public
 def __init__(_erc20: address, _erc721: address):
@@ -39,13 +40,13 @@ def redeem(_value: uint256) -> bool:
     @param _value Amount of erc20 tokens to redeem
     """
     assert _value != 0
-    self.token.burnFrom(msg.sender, _value)
+    self.token.burnFrom(msg.sender, _value*10**18)
 
     for i in range(90):
       if convert(i, uint256) >= _value:
         break
 
-      token_id: uint256 = self.tokensMinted + convert(i, uint256)
+      token_id: uint256 = self.tokensMinted + self.startingIndex +  convert(i, uint256)
       self.nft.mint(msg.sender, token_id)
       log.Redemption(msg.sender, token_id)
 
@@ -70,3 +71,7 @@ def changeOwner(_owner: address):
     assert self.owner == msg.sender
     self.owner = _owner
 
+@public
+def setStartingIndex(_index: uint256):
+    assert self.owner == msg.sender
+    self.startingIndex = _index
