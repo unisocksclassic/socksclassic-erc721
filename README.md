@@ -15,9 +15,18 @@ python3 -m venv env
 source env/bin/activate
 ```
 
-3. Install dependencies
+3. Install dependencies  
+
+This should work:
+
 ```
 pip install -r requirements.txt
+```  
+  
+But you might need to specify the compilers on macOS: 
+
+```
+env CC=clang CXX=clang++ pip install -r requirements.txt
 ```
 
 ## Testing
