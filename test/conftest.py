@@ -65,15 +65,6 @@ def REDEEM(w3, get_contract, SOCKSERC20, SOCKSERC721):
 
 
 @pytest.fixture
-def assert_fail():
-    def assert_fail(func):
-        with raises(Exception):
-            func()
-
-    return assert_fail
-
-
-@pytest.fixture
 def assert_tx_failed(tester):
     def assert_tx_failed(function_to_test,
                          exception=TransactionFailed,
@@ -86,3 +77,14 @@ def assert_tx_failed(tester):
             assert exc_text in str(excinfo.value)
 
     return assert_tx_failed
+
+
+@pytest.fixture
+def get_logs(w3):
+    def get_logs(tx_hash, c, event_name):
+        tx_receipt = w3.eth.getTransactionReceipt(tx_hash)
+        logs = c._classic_contract.events[event_name]().processReceipt(
+            tx_receipt)
+        return logs
+
+    return get_logs
