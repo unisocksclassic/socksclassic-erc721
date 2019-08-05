@@ -1,0 +1,19 @@
+{
+  "name": "socksclassic-erc721",
+  "version": "1.0.0",
+  "description": "Socksclassic is a ERC721 compatible non fungible token.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unisocksclassic/socksclassic-erc721.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/unisocksclassic/socksclassic-erc721/issues"
+  },
+  "homepage": "https://github.com/unisocksclassic/socksclassic-erc721#readme",
+  "devDependencies": {
+    "truffle": "^5.0.22",
+    "truffle-hdwallet-provider": "^1.0.15"
+  }
+}

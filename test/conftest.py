@@ -50,7 +50,7 @@ def get_contract(w3):
 
 @pytest.fixture
 def SOCKSERC20(w3, get_contract):
-    return get_contract('contracts/test_contracts/socksclassic.vy')
+    return get_contract('contracts/test_contracts/socksclassic_erc20.vy')
 
 
 @pytest.fixture
