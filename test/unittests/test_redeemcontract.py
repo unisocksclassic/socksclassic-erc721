@@ -31,13 +31,18 @@ def test_redeem(w3, REDEEM, SOCKSERC20, SOCKSERC721, assert_tx_failed):
     assert REDEEM.tokensMinted() == 2
 
 
-def test_redeem_several(w3, REDEEM, SOCKSERC20, SOCKSERC721, assert_tx_failed):
+def test_redeem_several(w3, REDEEM, SOCKSERC20, SOCKSERC721, assert_tx_failed,
+                        get_logs):
     a0, a1 = w3.eth.accounts[:2]
     SOCKSERC20.approve(REDEEM.address, 500 * DECIMALS, transact={'from': a0})
     SOCKSERC721.addMinter(REDEEM.address, transact={'from': a0})
 
-    REDEEM.redeem(9, transact={'from': a0})
+    tx_hash = REDEEM.redeem(9, transact={'from': a0})
+    redeem_logs = get_logs(tx_hash, REDEEM, 'Redemption')
     assert REDEEM.tokensMinted() == 9
+    assert len(redeem_logs) == 9
+    assert redeem_logs[len(redeem_logs) - 1].args._tokenId == 8
+
     assert SOCKSERC721.totalSupply() == 9
 
 
@@ -61,13 +66,18 @@ def test_change_erc721_address(w3, SOCKSERC20, SOCKSERC721, REDEEM,
     assert (REDEEM.token() == SOCKSERC20.address)
 
 
-def test_change_starting_index(w3, SOCKSERC20, SOCKSERC721, REDEEM):
+def test_change_starting_index(w3, SOCKSERC20, SOCKSERC721, REDEEM,
+                               assert_tx_failed, get_logs):
     a0, a1 = w3.eth.accounts[:2]
     SOCKSERC20.approve(REDEEM.address, 500 * DECIMALS, transact={'from': a0})
     SOCKSERC721.addMinter(REDEEM.address, transact={'from': a0})
     REDEEM.setStartingIndex(10, transact={'from': a0})
 
-    REDEEM.redeem(1, transact={'from': a0})
+    tx_hash = REDEEM.redeem(1, transact={'from': a0})
     assert REDEEM.tokensMinted() == 1
     assert SOCKSERC721.totalSupply() == 1
     assert SOCKSERC721.ownerOf(10) == a0
+
+    redeem_logs = get_logs(tx_hash, REDEEM, 'Redemption')
+    assert len(redeem_logs) == 1
+    assert redeem_logs[0].args._tokenId == 10

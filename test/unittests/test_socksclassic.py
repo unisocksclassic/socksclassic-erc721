@@ -36,4 +36,10 @@ def test_change_minter_zero(w3, SOCKSERC721, assert_tx_failed):
 def test_get_token_uri(w3, SOCKSERC721):
     assert SOCKSERC721.tokenURI(
         0
-    ) == 'https://cloudflare-ipfs.com/ipfs/QmVetwS6nt9ng9kFVStskZ1bmKWww42upDQHmSGqajbdrj'
+    ) == 'https://cloudflare-ipfs.com/ipfs/QmSV5WbZBcq2ULvSvHNhM74CecWSLhWPfarXy92EafFSgD'
+
+
+def test_set_token_uri(w3, SOCKSERC721):
+    a0, a1 = w3.eth.accounts[:2]
+    SOCKSERC721.setTokenURI(a1, transact={'from': a0})
+    assert SOCKSERC721.newTokenURI() == a1
