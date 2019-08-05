@@ -88,6 +88,8 @@ ERC165_INTERFACE_ID: constant(bytes32) = 0x0000000000000000000000000000000000000
 # @dev ERC165 interface ID of ERC721
 ERC721_INTERFACE_ID: constant(bytes32) = 0x0000000000000000000000000000000000000000000000000000000080ac58cd
 
+# @dev ERC165 interface ID of ERC721 Metadata
+ERC721_METADATA_INTERFACE_ID: constant(bytes32) = 0x000000000000000000000000000000000000000000000000000000005b5e139f
 
 @public
 def __init__():
@@ -100,6 +102,7 @@ def __init__():
     self.minters[msg.sender] = True
     self.supportedInterfaces[ERC165_INTERFACE_ID] = True
     self.supportedInterfaces[ERC721_INTERFACE_ID] = True
+    self.supportedInterfaces[ERC721_METADATA_INTERFACE_ID] = True
 
 
 @public
@@ -162,6 +165,11 @@ def isApprovedForAll(_owner: address, _operator: address) -> bool:
     @param _operator The address that acts on behalf of the owner.
     """
     return (self.ownerToOperators[_owner])[_operator]
+
+@public
+@constant
+def implementsERC721() -> bool:
+  return True
 
 
 ### TRANSFER FUNCTION HELPERS ###
@@ -405,7 +413,7 @@ def tokenURI(_tokenId: uint256) -> string[128]:
     @param _tokenId Token id fetch uri for.
     """
     if (self.newTokenURI == ZERO_ADDRESS):
-        return 'https://cloudflare-ipfs.com/ipfs/QmVetwS6nt9ng9kFVStskZ1bmKWww42upDQHmSGqajbdrj'
+        return 'https://cloudflare-ipfs.com/ipfs/QmSV5WbZBcq2ULvSvHNhM74CecWSLhWPfarXy92EafFSgD'
     else:
         return URI(self.newTokenURI).tokenURI(_tokenId)
 
